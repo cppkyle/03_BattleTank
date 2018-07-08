@@ -1,2 +1,2 @@
 # 03_BattleTank
-Open world tank battle
+Open world tank battle game.
