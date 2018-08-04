@@ -8,6 +8,7 @@ void ATankPlayerController::BeginPlay() {
 
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("TankPlayerCharacter Begin Play"));
+	
 	auto ControlledTank = GetControlledTank();
 
 	if (!ControlledTank) {
