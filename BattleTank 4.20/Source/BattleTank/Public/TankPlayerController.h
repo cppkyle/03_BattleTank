@@ -22,6 +22,18 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	void AimTowardsCrosshair()
+	void AimTowardsCrosshair();
+	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
+	bool GetLookDirection(FVector2D ScreenPosition, FVector& WorldDirection) const;
+	bool GetLookVectorHitLocation(FVector &HitLocation, FVector WorldRotation) const;
+
+	UPROPERTY(EditAnywhere)
+	float CrossHairXLocation = 0.5;
+
+	UPROPERTY(EditAnywhere)
+	float CrossHairYLocation = 0.33333;
+
+	UPROPERTY(EditAnywhere)
+	float LineTraceRange = 1000000;
 
 };

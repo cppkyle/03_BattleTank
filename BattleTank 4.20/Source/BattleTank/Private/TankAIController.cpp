@@ -24,6 +24,23 @@ void ATankAIController::BeginPlay() {
 
 }
 
+void ATankAIController::Tick(float DeltaSeconds) {
+
+	Super::Tick(DeltaSeconds);
+	auto PlayerTank = GetPlayerTank();
+	auto ControlledTank = GetControlledTank();
+
+	if (!ControlledTank) {
+		UE_LOG(LogTemp, Error, TEXT("%s can't access ControlledTank!"), *this->GetName());
+	}
+	else if (!PlayerTank) {
+		UE_LOG(LogTemp, Error, TEXT("%s can't access PlayerTank!"), *this->GetName());
+	}
+	else {
+		ControlledTank->AimAt(PlayerTank->GetActorLocation());
+	}
+}
+
 ATank* ATankAIController::GetControlledTank() const {
 
 	return Cast<ATank>(GetPawn());

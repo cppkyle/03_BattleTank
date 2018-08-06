@@ -31,4 +31,47 @@ ATank* ATankPlayerController::GetControlledTank() const {
 void ATankPlayerController::AimTowardsCrosshair() {
 
 	if (!GetControlledTank()) { return; }
+
+	FVector OutHitLocation;
+	if (GetSightRayHitLocation(OutHitLocation)) {
+
+		GetControlledTank()->AimAt(OutHitLocation);
+	}
+}
+
+bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const {
+
+	int ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+
+	auto ScreenPosition = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
+	FVector LookDirection;
+	if (ATankPlayerController::GetLookDirection(ScreenPosition, LookDirection)) {
+
+		ATankPlayerController::GetLookVectorHitLocation(OutHitLocation, LookDirection);
+	}
+
+	return true;
+}
+
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenPosition, FVector& LookDirection) const {
+	
+	FVector CameraWorldLocation;
+	return APlayerController::DeprojectScreenPositionToWorld(ScreenPosition.X, ScreenPosition.Y, CameraWorldLocation, LookDirection);
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector &HitLocation, FVector WorldRotation) const {
+
+	FHitResult HitResult;
+	auto StartLocation = PlayerCameraManager->GetCameraLocation();
+	auto EndLocation = StartLocation + (WorldRotation * LineTraceRange);
+
+	
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility)) {
+
+		HitLocation = HitResult.Location;
+		return true;
+	}
+
+	return false;
 }
